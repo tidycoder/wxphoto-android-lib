@@ -1,0 +1,1 @@
+include ':app', ':photopicker', ':photopicker2', ':mylibrary', ':photopicker4', ':wxphoto'

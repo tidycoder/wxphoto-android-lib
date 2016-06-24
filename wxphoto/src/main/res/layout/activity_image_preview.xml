@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/photopicker_toolbar" />
+
+    <uuke.xinfu.wxphoto.widget.ViewPagerFixed
+        android:id="@+id/vp_photos"
+        android:layout_below="@+id/pickerToolbar"
+        android:paddingBottom="?android:attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:id="@+id/photo_picker_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="#cc000000">
+
+        <CheckBox
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="原图"
+            android:textSize="@dimen/action_text_size"
+            android:id="@+id/btnPreviewOrigin"
+            android:layout_centerVertical="true"
+            android:checked="false"
+            android:textColor="@color/action_text_color"
+            android:singleLine="false"
+            android:button="@drawable/abc_btn_check_material"
+            android:buttonTint="#cfcfcf"
+            android:clickable="true" />
+
+        <Button
+            android:id="@+id/btnPreviewConfirm"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/yes"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:textSize="@dimen/action_text_size"
+            android:enabled="true"
+            android:textColor="@color/action_text_color"
+            android:layout_alignParentRight="true"
+            android:clickable="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <include layout="@layout/photopicker_toolbar" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/android_gridView"
+        android:layout_below="@+id/pickerToolbar"
+        android:columnWidth="120dp"
+        android:backgroundTint="#ffffff"
+        android:horizontalSpacing="2dp"
+        android:verticalSpacing="@dimen/space_size" />
+
+
+    <RelativeLayout
+        android:id="@+id/video_picker_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="#cc000000">
+
+        <Button
+            android:id="@+id/btnVideoAlbum"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="所有视频"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:textSize="@dimen/action_text_size"
+            android:textColor="@color/action_text_color"
+            android:drawableRight="@drawable/text_indicator"/>
+
+    </RelativeLayout>
+</RelativeLayout>
