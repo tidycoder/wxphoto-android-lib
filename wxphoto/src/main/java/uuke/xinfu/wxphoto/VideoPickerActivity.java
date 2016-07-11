@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.LoaderManager;
@@ -24,9 +28,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.Toast;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -54,6 +60,7 @@ public class VideoPickerActivity extends AppCompatActivity{
     private View mPopupAnchorView;
     private ListPopupWindow mFolderPopupWindow;
     private Button btnAlbum;
+    private Button btnVideoConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +81,15 @@ public class VideoPickerActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // 正常操作
                 Video video = (Video) adapterView.getAdapter().getItem(i);
-                selectVideoFromGrid(video);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse("file://" + video.path);
+                intent.setDataAndType(uri, "video/*");
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    //Toast.makeText(context, "No application found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -98,6 +113,40 @@ public class VideoPickerActivity extends AppCompatActivity{
             }
         });
 
+        btnVideoConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Video video = mVideoAdapter.getSelected();
+                if (video != null) {
+                    if (video.duration > 60000) {
+                        Toast.makeText(mCxt, "该视频时间过长", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String videoFile = video.path;
+                    Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFile,
+                            MediaStore.Images.Thumbnails.MINI_KIND);
+
+                    try {
+                        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                                "/uuke";
+                        String file_name = video.name.substring(0, video.name.indexOf('.')) + ".png";
+                        File dir = new File(file_path);
+                        if(!dir.exists())
+                            dir.mkdirs();
+                        File file = new File(dir, file_name);
+                        FileOutputStream fOut = new FileOutputStream(file);
+
+                        thumbnail.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        complete(video, file_path + "/" + file_name);
+                    } catch (Exception e) {
+                        complete(video, "");
+                    }
+                }
+            }
+        });
+
     }
 
     private void initViews(){
@@ -113,6 +162,7 @@ public class VideoPickerActivity extends AppCompatActivity{
 
         mPopupAnchorView = findViewById(R.id.video_picker_footer);
         btnAlbum = (Button)findViewById(R.id.btnVideoAlbum);
+        btnVideoConfirm = (Button)findViewById(R.id.btnVideoConfirm);
     }
 
     private void createPopupFolderList(){
@@ -194,7 +244,27 @@ public class VideoPickerActivity extends AppCompatActivity{
                     int action = data.getIntExtra("action", 1);
                     if (action == 1) {
                         Video video = data.getParcelableExtra("result");
-                        complete(video);
+                        String videoFile = video.path;
+                        Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFile,
+                                MediaStore.Images.Thumbnails.MINI_KIND);
+
+                        try {
+                            String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                                    "/uuke";
+                            String file_name = video.name.substring(0, video.name.indexOf('.')) + ".png";
+                            File dir = new File(file_path);
+                            if(!dir.exists())
+                                dir.mkdirs();
+                            File file = new File(dir, file_name);
+                            FileOutputStream fOut = new FileOutputStream(file);
+
+                            thumbnail.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                            fOut.flush();
+                            fOut.close();
+                            complete(video, file_path + "/" + file_name);
+                        } catch (Exception e) {
+                            complete(video, "");
+                        }
                     }
 
                     break;
@@ -230,9 +300,19 @@ public class VideoPickerActivity extends AppCompatActivity{
             mVideoAdapter.select(video);
             //@todo go to preview video
             // 预览
-            Intent intent = new Intent(this, VideoPreviewActivity.class);
-            intent.putExtra("video", video);
-            startActivityForResult(intent, VideoPreviewActivity.REQUEST_PREVIEW);
+            // Display video player
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("file://" + video.path);
+            intent.setDataAndType(uri, "video/*");
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                //Toast.makeText(context, "No application found", Toast.LENGTH_SHORT).show();
+            }
+
+//            Intent intent = new Intent(this, VideoPreviewActivity.class);
+//            intent.putExtra("video", video);
+//            startActivityForResult(intent, VideoPreviewActivity.REQUEST_PREVIEW);
         }
     }
 
@@ -380,9 +460,10 @@ public class VideoPickerActivity extends AppCompatActivity{
     }
 
     // 返回已选择的图片数据
-    private void complete(Video video){
+    private void complete(Video video, String coverUrl){
         Intent data = new Intent();
         data.putExtra("video", video);
+        data.putExtra("coverUrl", coverUrl);
         setResult(RESULT_OK, data);
         finish();
     }

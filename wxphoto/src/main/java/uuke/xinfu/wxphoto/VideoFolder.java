@@ -14,7 +14,7 @@ public class VideoFolder {
     @Override
     public boolean equals(Object o) {
         try {
-            Folder other = (Folder) o;
+            VideoFolder other = (VideoFolder) o;
             return this.path.equalsIgnoreCase(other.path);
         }catch (ClassCastException e){
             e.printStackTrace();

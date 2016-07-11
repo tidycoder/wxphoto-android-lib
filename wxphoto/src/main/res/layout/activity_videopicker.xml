@@ -34,7 +34,37 @@
             android:background="@null"
             android:textSize="@dimen/action_text_size"
             android:textColor="@color/action_text_color"
-            android:drawableRight="@drawable/text_indicator"/>
+            android:drawableRight="@drawable/text_indicator"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="false" />
+
+        <Button
+            android:id="@+id/btnVideoConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选取"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:textColor="#00ff00"
+            android:textSize="@dimen/action_text_size"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignBottom="@+id/btnVideoAlbum" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="仅支持一分钟内的短视频"
+            android:id="@+id/android_textView"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textColor="#80fafafa"
+            android:layout_toLeftOf="@+id/btnVideoConfirm"
+            android:layout_toStartOf="@+id/btnVideoConfirm"
+            android:layout_toRightOf="@+id/btnVideoAlbum"
+            android:layout_toEndOf="@+id/btnVideoAlbum"
+            />
 
     </RelativeLayout>
 </RelativeLayout>

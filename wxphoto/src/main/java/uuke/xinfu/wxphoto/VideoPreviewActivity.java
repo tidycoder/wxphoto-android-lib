@@ -4,8 +4,11 @@ package uuke.xinfu.wxphoto;
  * Created by liupeng on 16/6/21.
  */
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -14,6 +17,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.VideoView;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class VideoPreviewActivity extends AppCompatActivity{
 
@@ -97,6 +103,8 @@ public class VideoPreviewActivity extends AppCompatActivity{
         data.putExtra("action", 1);
         data.putExtra("result", mVideo);
         setResult(RESULT_OK, data);
+
         finish();
+
     }
 }

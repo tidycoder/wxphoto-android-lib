@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.netcompss.ffmpeg4android.GeneralUtils;
+import com.netcompss.loader.LoadJNI;
+
 import uuke.xinfu.wxphoto.ImageCaptureManager;
 import uuke.xinfu.wxphoto.ImageConfig;
 import uuke.xinfu.wxphoto.PhotoPickerActivity;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GeneralUtils.checkForPermissionsMAndAbove(MainActivity.this, false);
 
         btnMuilt = (Button) findViewById(R.id.btnMuilt);
         btnSingle = (Button) findViewById(R.id.btnSingle);
@@ -104,18 +108,30 @@ public class MainActivity extends AppCompatActivity {
         btnMuilt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                GeneralUtils.checkForPermissionsMAndAbove(Main.this, true);
+//                LoadJNI vk = new LoadJNI();
+//                try {
+//                    String workFolder = getApplicationContext().getFilesDir().getAbsolutePath();
+//                    String[] complexCommand = {"ffmpeg","-i", "/sdcard/videokit/in.mp4"};
+//                    vk.run(complexCommand , workFolder , getApplicationContext());
+//                    Log.i("test", "ffmpeg4android finished successfully");
+//                } catch (Throwable e) {
+//                    Log.e("test", "vk run exception.", e);
+//                }
+
                 PhotoPickerIntent intent = new PhotoPickerIntent(MainActivity.this);
                 intent.setSelectModel(SelectModel.MULTI);
                 intent.setShowCarema(true); // 是否显示拍照
                 intent.setMaxTotal(9); // 最多选择照片数量，默认为9
                 intent.setSelectedPaths(imagePaths); // 已选中的照片地址， 用于回显选中状态
+                startActivityForResult(intent, REQUEST_CAMERA_CODE);
+
 //                ImageConfig config = new ImageConfig();
 //                config.minHeight = 400;
 //                config.minWidth = 400;
 //                config.mimeType = new String[]{"image/jpeg", "image/png"};
 //                config.minSize = 1 * 1024 * 1024; // 1Mb
 //                intent.setImageConfig(config);
-                startActivityForResult(intent, REQUEST_CAMERA_CODE);
             }
         });
 

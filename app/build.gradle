@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.foamtrace.photopickersample"
-        minSdkVersion 11
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -33,4 +33,5 @@ dependencies {
     compile project(':wxphoto')
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.github.chrisbanes.photoview:library:+'
+    compile project(':ffmpeg4android_lib')
 }

@@ -16,9 +16,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:textAlignment="viewEnd"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="5dp"
         android:textColor="#ffffff" />
 
+    <ImageView
+        android:id="@+id/checkmark_video"
+        android:layout_gravity="top|right"
+        android:padding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/btn_unselected"/>
 
 </FrameLayout>

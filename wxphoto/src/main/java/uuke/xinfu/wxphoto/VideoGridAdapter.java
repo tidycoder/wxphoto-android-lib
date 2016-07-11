@@ -46,6 +46,10 @@ public class VideoGridAdapter extends BaseAdapter {
         mItemLayoutParams = new GridView.LayoutParams(mItemSize, mItemSize);
     }
 
+    public Video getSelected() {
+        return mSelectdedVideo;
+    }
+
 
     public void select(Video video) {
         mSelectdedVideo = video;
@@ -126,7 +130,7 @@ public class VideoGridAdapter extends BaseAdapter {
             }
         }
         if(holde != null) {
-            holde.bindData(getItem(i));
+            holde.bindData(i, getItem(i));
         }
 
         /** Fixed View Size */
@@ -142,11 +146,25 @@ public class VideoGridAdapter extends BaseAdapter {
     class ViewHolde {
         ImageView image;
 //        View mask;
+        ImageView indicator;
         TextView textDuration;
+        int index;
 
         ViewHolde(View view){
             image = (ImageView) view.findViewById(R.id.videocover);
+            indicator = (ImageView) view.findViewById(R.id.checkmark_video);
             textDuration = (TextView) view.findViewById(R.id.videoDuration);
+            indicator.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getItem(index) == mSelectdedVideo) {
+                        mSelectdedVideo = null;
+                    } else {
+                        mSelectdedVideo = getItem(index);
+                    }
+                    notifyDataSetChanged();
+                }
+            });
 //            mask = view.findViewById(R.id.mask);
             view.setTag(this);
         }
@@ -157,8 +175,15 @@ public class VideoGridAdapter extends BaseAdapter {
             return String.format("%02d:%02d", minutes, seconds);
         }
 
-        void bindData(final Video data){
+        void bindData(int i, final Video data){
+            index = i;
             if(data == null) return;
+            indicator.setVisibility(View.VISIBLE);
+            if (mSelectdedVideo == data) {
+                indicator.setImageResource(R.mipmap.btn_selected);
+            } else {
+                indicator.setImageResource(R.mipmap.btn_unselected);
+            }
 
             if(mItemSize > 0) {
                 File imageFile = new File(data.path);
